@@ -1,2 +1,5 @@
 Revision history for Perl extension XML::Flow.
+0.82 - add function xml2ref(), ref2xml;
+     - add tests;
+     - add support handlers withow embeded xml_flow_struct
 0.81 - remove debug, fix pod
