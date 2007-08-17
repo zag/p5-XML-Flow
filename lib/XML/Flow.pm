@@ -1,6 +1,6 @@
 package XML::Flow;
 
-#$Id: Flow.pm,v 1.3 2006/07/26 07:20:46 zag Exp $
+#$Id$
 
 =pod
 
@@ -56,7 +56,7 @@ use strict;
 require Exporter;
 *import               = \&Exporter::import;
 @XML::Flow::EXPORT_OK = qw(ref2xml xml2ref);
-$XML::Flow::VERSION   = '0.82';
+$XML::Flow::VERSION   = '0.83';
 my $attrs = {
     _file        => undef,
     _file_handle => undef,
@@ -469,14 +469,14 @@ sub _parse_stream {
         }
         return;
     }
-    if ( $state == 2 && (my $current = pop @{$stream_stack} )) {
-        unless (exists $current->{fake} ) {
-        $current->{text} ='' unless exists $current->{text};
-        $current->{text} .= $elem;
+    if ( $state == 2 && ( my $current = pop @{$stream_stack} ) ) {
+        unless ( exists $current->{fake} ) {
+            $current->{text} = '' unless exists $current->{text};
+            $current->{text} .= $elem;
         }
         push @{$stream_stack}, $current;
     }
-    
+
     if ( $state == 1 ) {
         push @{$stream_stack},
           exists( $tags->{$elem} )
@@ -489,7 +489,14 @@ sub _parse_stream {
         return unless my $handler = $tags->{ $current->{name} };
         print 'ERROR stack for ' . $elem . "->" . $current->{name}
           unless $current->{name} eq $elem;
-        my @res = ( $handler->( $current->{attr}, ref($current->{value}) ? @{$current->{value}} :  $current->{text}) );
+        my @res = (
+            $handler->(
+                $current->{attr},
+                ref( $current->{value} )      ? @{ $current->{value} }
+                : defined( $current->{text} ) ? $current->{text}
+                : ()
+            )
+        );
         if ( my $parent = pop @{$stream_stack} ) {
             push @{ $parent->{value} }, @res
               if scalar @res && not exists $parent->{fake};
