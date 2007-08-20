@@ -1,4 +1,5 @@
 Revision history for Perl extension XML::Flow.
+
 0.83 - fix: don't pass undefined value of text to tags handler
 
 0.82 - add function xml2ref(), ref2xml;
