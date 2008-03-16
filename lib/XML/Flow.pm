@@ -487,6 +487,10 @@ sub _parse_stream {
         return unless my $handler = $tags->{ $current->{name} };
         print 'ERROR stack for ' . $elem . "->" . $current->{name}
           unless $current->{name} eq $elem;
+        #before call handler push to stack text values
+        my $text = delete $current->{text};
+        # not save format text
+       push @{ $current->{value} }, $text if defined $text && $text !~ /^\s+$/s;
         my @res = (
             $handler->(
                 $current->{attr},
