@@ -1,5 +1,7 @@
 Revision history for Perl extension XML::Flow.
-
+0.85
+    - support for nested tags into text, eg.:
+        <tag> text text <tag2>some</tag2> continued text</tag>
 0.84
      - tune xml size 
 0.83 - fix: don't pass undefined value of text to tags handler
