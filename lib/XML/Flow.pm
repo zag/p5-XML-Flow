@@ -239,8 +239,7 @@ sub _get_writer {
     my $self = shift;
     unless ( $self->_writer ) {
         my $fh = $self->_get_handle(1) || $self->_file;
-        my $writer = new XML::Writer::
-          OUTPUT      => $fh;
+        my $writer = new XML::Writer:: OUTPUT => $fh;
         $writer->xmlDecl("UTF-8");
         $self->_writer($writer)
 
@@ -487,10 +486,13 @@ sub _parse_stream {
         return unless my $handler = $tags->{ $current->{name} };
         print 'ERROR stack for ' . $elem . "->" . $current->{name}
           unless $current->{name} eq $elem;
+
         #before call handler push to stack text values
         my $text = delete $current->{text};
+
         # not save format text
-       push @{ $current->{value} }, $text if defined $text && $text !~ /^\s+$/s;
+        push @{ $current->{value} }, $text
+          if defined $text && $text !~ /^\s+$/s;
         my @res = (
             $handler->(
                 $current->{attr},
@@ -500,13 +502,16 @@ sub _parse_stream {
             )
         );
         if ( my $parent = pop @{$stream_stack} ) {
-            if (scalar @res && not exists $parent->{fake} ) {
-            # store braked chars streams to values
-            # <tag> text text <tag2>some</tag2> continued text</tag>
+            if ( scalar @res && not exists $parent->{fake} ) {
+
+                # store braked chars streams to values
+                # <tag> text text <tag2>some</tag2> continued text</tag>
                 my $text = delete $parent->{text};
+
                 # not save format text
-                push @{ $parent->{value} }, $text if defined $text && $text !~ /^\s+$/s;
-                push @{ $parent->{value} }, @res
+                push @{ $parent->{value} }, $text
+                  if defined $text && $text !~ /^\s+$/s;
+                push @{ $parent->{value} }, @res;
             }
             push @{$stream_stack}, $parent;
         }
