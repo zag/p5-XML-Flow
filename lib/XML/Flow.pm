@@ -56,7 +56,7 @@ use strict;
 require Exporter;
 *import               = \&Exporter::import;
 @XML::Flow::EXPORT_OK = qw(ref2xml xml2ref);
-$XML::Flow::VERSION   = '0.85';
+$XML::Flow::VERSION   = '0.86';
 my $attrs = {
     _file        => undef,
     _file_handle => undef,
